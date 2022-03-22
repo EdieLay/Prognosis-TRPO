@@ -40,39 +40,39 @@ float err_1() {
 	return a;
 }
 
-class Quarter {
-	string quarter_name;
+class Deal {
+	unsigned int deal_number;
 	float price_buy;
 	float price_sale;
 	unsigned int amount_instock;
 	unsigned int amount_buy;
 	unsigned int amount_sale;
 public:
-	Quarter() {
-		quarter_name = "0";
+	Deal() {
+		deal_number = 0;
 		price_buy = 0;
 		price_sale = 0;
 		amount_instock = 0;
 		amount_buy = 0;
 		amount_sale = 0;
 	}
-	Quarter(string qn, float pb, float ps, unsigned int ai, unsigned int ab, unsigned int as) { 
-		quarter_name = qn;
+	Deal(unsigned int dn, float pb, float ps, unsigned int ai, unsigned int ab, unsigned int as) { 
+		deal_number = dn;
 		price_buy = pb;
 		price_sale = ps;
 		amount_instock = ai;
 		amount_buy = ab;
 		amount_sale = as;
 	}
-	~Quarter() {}
-	string get_quarter_name() { return quarter_name; }
+	~Deal() {}
+	unsigned int get_deal_number() { return deal_number; }
 	float get_price_buy() { return price_buy; }
 	float get_price_sale() { return price_sale; }
 	unsigned int get_amount_instock() { return amount_instock; }
 	unsigned int get_amount_buy() { return amount_buy; }
 	unsigned int get_amount_sale() { return amount_sale; }
 
-	void set_quarter_name(string qn) { quarter_name = qn; }
+	void set_deal_name(unsigned int dn) { deal_number = dn; }
 	void set_price_buy(float pb) { price_buy = pb; }
 	void set_price_sale(float ps) { price_sale = ps; }
 	void set_amount_instock(unsigned int ai) { amount_instock = ai; }
@@ -85,14 +85,14 @@ class Goods {
 	string category;
 	unsigned int ID;
 	float price_buy_next;
-	vector<Quarter> History;
+	vector<Deal> History;
 public:
 	Goods() {
 		name = "0";
 		category = "0";
 		ID = 0;
 		price_buy_next = 0;
-		History = { {"0", 0, 0, 0, 0, 0} }; 
+		History = { {0, 0, 0, 0, 0, 0} }; 
 		History.pop_back();
 	}
 	Goods(string n, string c, unsigned int ident, float p) {
@@ -100,7 +100,7 @@ public:
 		category = c;
 		ID = ident;
 		price_buy_next = p;
-		History = { {"0", 0, 0, 0, 0, 0} };
+		History = { {0, 0, 0, 0, 0, 0} };
 		History.pop_back();
 	}
 	~Goods() {}
@@ -108,13 +108,13 @@ public:
 	string get_category() { return category; }
 	unsigned int get_ID() { return ID; }
 	float get_price_buy_next() { return price_buy_next; }
-	vector<Quarter> get_History() { return History; }
+	vector<Deal> get_History() { return History; }
 
-	//Quarter& get_History(int index) { return History[index]; }
-	Quarter& get_Quarter(string nq) {
-		vector<Quarter>::iterator iter = History.begin();
+	//Deal& get_History(int index) { return History[index]; }
+	Deal& get_Deal(unsigned int dn) {
+		vector<Deal>::iterator iter = History.begin();
 		while (iter != History.end()) {
-			if ((*iter).get_quarter_name() == nq) {
+			if ((*iter).get_deal_number() == dn) {
 				return *iter;
 			}
 			else iter++;
@@ -125,14 +125,13 @@ public:
 	void set_category(string c) { category = c; }
 	void set_ID(unsigned int ident) { ID = ident; }
 	void set_price_buy_next(float p) { price_buy_next = p; }
-	void set_History(int index, Quarter h) { History[index] = h; } //нужно ли вообще?
+	void set_History(int index, Deal h) { History[index] = h; } //нужно ли вообще?
 
-	void Add_Quarter() {
-		string qn;
+	void Add_Deal() {
 		float pb, ps;
-		unsigned int ai, ab, as;
-		cout << "Введите название квартала: ";
-		getline(cin, qn);
+		unsigned int ai, ab, as, qn;
+		cout << "Введите номер сделки: ";
+		qn = err_0();
 		cout << "Введите закупочную цену товара: ";
 		pb = err_1();
 		cout << "Введите цену продажи товара: ";
@@ -143,7 +142,7 @@ public:
 		ab = err_0();
 		cout << "Введите количество проданного товара: ";
 		as = err_0();
-		History.push_back(Quarter(qn, pb, ps, ai, ab, as));
+		History.push_back(Deal(qn, pb, ps, ai, ab, as));
 		cout << "_________________________________________________________\n";
 		cin.get();
 	}
@@ -152,9 +151,9 @@ public:
 		cout << "Категория товара: " << category << endl;
 		cout << "ID товара: " << ID << endl;
 		cout << "\t\tИстория товара: " << endl;
-		vector<Quarter>::iterator iter = History.begin();
+		vector<Deal>::iterator iter = History.begin();
 		while (iter != History.end()) {
-			cout << "\tНаименование квартала: " << (*iter).get_quarter_name() << endl;
+			cout << "\tНомер сделки: " << (*iter).get_deal_number() << endl;
 			cout << "Закупочная цена товара: " << (*iter).get_price_buy() << endl;
 			cout << "Цена продажи товара: " << (*iter).get_price_sale() << endl;
 			cout << "Количество товара в наличии: " << (*iter).get_amount_instock() << endl;
@@ -196,29 +195,29 @@ public:
 	void Price_Count(vector<Goods> all_goods)
 	{
 		float max_price_sale, min_price_sale, max_amount_sale, min_amount_sale, temp_price, temp_amount;
-		vector<Quarter> curr_history;
+		vector<Deal> curr_history;
 		vector<Goods>::iterator goods_iter = all_goods.begin();
-		vector<Quarter>::iterator quarter_iter;
+		vector<Deal>::iterator deal_iter;
 		while (goods_iter != all_goods.end())
 		{
 			curr_history = (*goods_iter).get_History();
 			if (curr_history.size() > 1)
 			{
-				quarter_iter = curr_history.begin();
-				max_price_sale = (*quarter_iter).get_price_sale();
+				deal_iter = curr_history.begin();
+				max_price_sale = (*deal_iter).get_price_sale();
 				min_price_sale = max_price_sale;
-				max_amount_sale = (*quarter_iter).get_amount_sale();
+				max_amount_sale = (*deal_iter).get_amount_sale();
 				min_amount_sale = max_amount_sale;
-				quarter_iter++;
-				while (quarter_iter != curr_history.end())
+				deal_iter++;
+				while (deal_iter != curr_history.end())
 				{
-					temp_price = (*quarter_iter).get_price_sale();
-					temp_amount = (*quarter_iter).get_amount_sale();
+					temp_price = (*deal_iter).get_price_sale();
+					temp_amount = (*deal_iter).get_amount_sale();
 					max_price_sale = max(max_price_sale, temp_price);
 					min_price_sale = min(min_price_sale, temp_price);
 					max_amount_sale = max(max_amount_sale, temp_amount);
 					min_amount_sale = min(min_amount_sale, temp_amount); // сделать, чтобы количество проданного товара соответствовало цене
-					quarter_iter++;
+					deal_iter++;
 				}
 				if (max_price_sale > min_price_sale && max_amount_sale > min_amount_sale)
 				{

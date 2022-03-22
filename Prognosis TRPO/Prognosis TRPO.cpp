@@ -14,7 +14,7 @@ int main()
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 	Goods g;
-	Quarter q;
+	Deal q;
 	vector<Goods> All_Goods;
 	Prognosis All_Prognosis;
 	All_Goods.clear();
@@ -30,8 +30,8 @@ int main()
 	g.set_ID(1001);
 	g.set_price_buy_next(43);
 
-	g.Add_Quarter();
-	g.Add_Quarter();
+	g.Add_Deal();
+	g.Add_Deal();
 	g.Get_Good_Info();
 	cout << endl;
 
