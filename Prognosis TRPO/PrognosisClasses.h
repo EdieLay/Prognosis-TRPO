@@ -185,11 +185,11 @@ pair<float, float> func_max(float first_point, float second_point, float y, floa
 
 class Prognosis
 {
-	vector<pair<string, pair<float, float>>> price_prognosis;
+	vector<pair<float, float>> price_prognosis;
 public:
 	Prognosis()
 	{
-		price_prognosis = { {"0", {0, 0} } };
+		price_prognosis = { {0, 0 } };
 		price_prognosis.clear();
 	}
 	void Price_Count(vector<Goods> all_goods)
@@ -221,27 +221,17 @@ public:
 				}
 				if (max_price_sale > min_price_sale && max_amount_sale > min_amount_sale)
 				{
-					price_prognosis.push_back(make_pair((*goods_iter).get_name(), func_max(min_price_sale, max_price_sale, min_price_sale, max_price_sale, min_price_sale, min_amount_sale, max_amount_sale, (*goods_iter).get_price_buy_next(), -100000)));
+					price_prognosis.push_back(func_max(min_price_sale, max_price_sale, min_price_sale, max_price_sale, min_price_sale, min_amount_sale, max_amount_sale, (*goods_iter).get_price_buy_next(), -100000));
 				}
 				else
 				{
-					price_prognosis.push_back(make_pair((*goods_iter).get_name(), make_pair(0, 0)));
+					price_prognosis.push_back(make_pair(0, 0));
 				}
 			}
-			else price_prognosis.push_back(make_pair((*goods_iter).get_name(), make_pair(0, 0)));
+			else price_prognosis.push_back(make_pair(0, 0));
 			goods_iter++;
 		}
 	}
-	void show_price_prognosis(vector<pair<string, pair <float, float>>> price_prognosis)
-	{
-		vector<pair<string, pair<float, float>>>::iterator iter = price_prognosis.begin();
-		while (iter != price_prognosis.end())
-		{
-			cout << "Название товара: " << (*iter).first << endl;
-			cout << "Спрогнозированная цена продажи: " << (*iter).second.first << endl;
-			cout << "Спрогнозированный спрос: " << floor((*iter).second.second) << endl;
-			iter++;
-		}
-	}
-	vector<pair<string, pair<float, float>>> get_price_prognosis() { return price_prognosis; }
+
+	vector<pair<float, float>> get_price_prognosis() { return price_prognosis; }
 };

@@ -19,12 +19,6 @@ int main()
 	Prognosis All_Prognosis;
 	All_Goods.clear();
 
-	/* q.set_quarter_name("Q1");
-	q.set_price_buy(500);
-	q.set_amount_sale(700);
-	q.set_amount_instock(12);
-	q.set_amount_buy(50);
-	q.set_amount_sale(38); */
 	g.set_name("tovar");
 	g.set_category("categoria");
 	g.set_ID(1001);
@@ -37,16 +31,7 @@ int main()
 
 	All_Goods.push_back(g);
 
-	/*q = g.get_Quarter("1");
-	cout << q.get_quarter_name() << endl;
-	cout << q.get_price_buy() << endl;
-	cout << q.get_price_sale() << endl;
-	cout << q.get_amount_instock() << endl;
-	cout << q.get_amount_buy() << endl;
-	cout << q.get_amount_sale() << endl;*/
-
 	All_Prognosis.Price_Count(All_Goods);
-	All_Prognosis.show_price_prognosis(All_Prognosis.get_price_prognosis());
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
