@@ -13,25 +13,21 @@ int main()
 	setlocale(LC_ALL, "rus");
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
-	Goods g;
-	Deal q;
-	vector<Goods> All_Goods;
+
 	Prognosis All_Prognosis;
-	All_Goods.clear();
+	vector<Goods> all_Goods = get_data();
 
-	g.set_name("tovar");
-	g.set_category("categoria");
-	g.set_ID(1001);
-	g.set_price_buy_next(43);
+	All_Prognosis.Price_Count(all_Goods);
 
-	g.Add_Deal();
-	g.Add_Deal();
-	g.Get_Good_Info();
-	cout << endl;
-
-	All_Goods.push_back(g);
-
-	All_Prognosis.Price_Count(All_Goods);
+	vector<pair<float, unsigned int>> prognosis;
+	prognosis = All_Prognosis.get_price_prognosis();
+	vector<pair<float, unsigned int>>::iterator pr_iter = prognosis.begin();
+	cout << "Цена\t\tСпрос" << endl;
+	while (pr_iter != prognosis.end())
+	{
+		cout << (*pr_iter).first << "\t\t" << (*pr_iter).second << endl;
+		pr_iter++;
+	}
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
