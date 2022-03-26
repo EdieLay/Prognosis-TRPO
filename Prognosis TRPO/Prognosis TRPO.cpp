@@ -21,13 +21,9 @@ int main()
 
 	vector<pair<float, unsigned int>> prognosis;
 	prognosis = All_Prognosis.get_price_prognosis();
-	vector<pair<float, unsigned int>>::iterator pr_iter = prognosis.begin();
-	cout << "Цена\t\tСпрос" << endl;
-	while (pr_iter != prognosis.end())
-	{
-		cout << (*pr_iter).first << "\t\t" << (*pr_iter).second << endl;
-		pr_iter++;
-	}
+	print_prognosis(all_Goods, prognosis);
+
+	return 0;
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"

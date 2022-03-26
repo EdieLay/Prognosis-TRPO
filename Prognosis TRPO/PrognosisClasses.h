@@ -6,6 +6,8 @@
 #include <vector>
 #include <algorithm>
 #include <fstream>
+#include <list>
+#include <iomanip>
 using namespace std;
 
 int err_0() {
@@ -135,6 +137,17 @@ public:
 			iter++;
 		}
 		cout << "_________________________________________________________\n";
+	}
+
+	string GetCsvGoods() {
+		string data;
+
+		vector<Deal>::iterator iter = History.begin();
+		data = data + to_string(ID) + ";" + (*iter).get_name() + ";" + category + ";" + to_string((*iter).get_deal_number()) + ";" + to_string((*iter).get_price_buy()) + ";" +
+			to_string((*iter).get_price_sale()) + ";" + to_string((*iter).get_amount_instock()) + ";" + to_string((*iter).get_amount_buy()) + ";" + to_string((*iter).get_amount_sale());
+		iter++;
+
+		return data;
 	}
 };
 
@@ -276,6 +289,76 @@ vector<Goods> get_data() {
 	return all_Goods;
 }
 
+/*vector<Goods> get_data() {
+	string line_from_file, str0, n_n, new_category;
+	unsigned int newId = 0, n_ai, n_ab, n_as, n_dn = 1;
+	float new_price_buy_next, n_pb, n_ps;
+	int number_of_lines = 0, n1 = 0;
+	bool b;
+	vector<Goods>::iterator iter_goods;
+
+	string path = "Deals.csv";
+	ifstream file;
+	file.open(path);
+
+	if (!file.is_open())
+		cout << "Ошибка открытия файла!" << endl;
+	else
+		cout << "Файл открыт!" << endl;
+
+	vector<Goods> vector_Goods;
+	vector_Goods.clear();
+
+	if (file) {
+		vector<string> vector_csv_element;
+		list<vector<string>> two_list_csv_element;
+
+		string header{};
+		if (getline(file, header))
+			cout << header << '\n';
+
+		while (getline(file, line_from_file)) {
+			string word;
+			for (char item_line : line_from_file) {
+				word += item_line;
+				if (item_line == ';') {
+					vector_csv_element.push_back(word);
+					word = "";
+				}
+			}
+			vector_csv_element.push_back(word);///для последнего элемента
+			two_list_csv_element.push_back(vector_csv_element);
+			vector_csv_element.clear();
+		}
+
+		for (vector<string> item_list : two_list_csv_element) { ///вывод
+			for (string item_string : item_list) {
+				cout << item_string << "\t";
+			}
+			cout << "\n";
+		}
+		try {
+			for (vector<string> item_vector : two_list_csv_element) {///запись
+				if (newId != stoi(item_vector[0])) {
+					new_category = item_vector[2];
+					newId = stoi(item_vector[0]);
+					new_price_buy_next = stoi(item_vector[8]);
+					vector_Goods.push_back(Goods(new_category, newId, new_price_buy_next));
+				}
+				vector_Goods.back().Add_Deal(item_vector[1], n_dn++, stoi(item_vector[3]), stoi(item_vector[4]), stoi(item_vector[5]), stoi(item_vector[6]), stoi(item_vector[7]));
+			}
+		}
+		catch (exception e) {
+			cout << "недостаточно элементов";
+			cout << e.what();
+		}
+
+	}
+
+	file.close();
+	return vector_Goods;
+}*/
+
 float get_demand(float y, float y1, float y2, unsigned int x1, unsigned int x2)
 {
 	return (y - y1) * ((float)x2 - (float)x1) / (y2 - y1) + (float)x1;
@@ -387,4 +470,35 @@ public:
 	}
 
 	vector<pair<float, unsigned int>> get_price_prognosis() { return price_prognosis; }
+
+	void GetAllPricePrognosis() {
+		vector<pair<float, unsigned int>>::iterator price_item = price_prognosis.begin();
+
+		for (price_item; price_item != price_prognosis.end(); ++price_item) {
+			cout << "Прогнозируемая цена: " << price_item->first
+				<< "\nПрогнозируемый спрос:  " << price_item->second << endl;
+		}
+	}
+
+	/*string GetCsvPrognosis() {
+		string data;
+
+		vector<pair<float, unsigned int>>::iterator price_item = price_prognosis.begin();
+		data = data + to_string(price_item->first) + ";" + to_string(price_item->second) + "\n";
+		price_item++;
+		return data;
+	}*/
 };
+
+void print_prognosis(vector<Goods> all_Goods, vector<pair<float, unsigned int>> prognosis)
+{
+	vector<Goods>::iterator goods_iter = all_Goods.begin();
+	vector<pair<float, unsigned int>>::iterator pr_iter = prognosis.begin();
+	cout << "ID\tЦена\t\tСпрос" << endl;
+	while (pr_iter != prognosis.end())
+	{
+		cout << (*goods_iter).get_ID() << "\t" << (*pr_iter).first << "\t\t" << (*pr_iter).second << endl;
+		pr_iter++;
+		goods_iter++;
+	}
+}
